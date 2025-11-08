@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>할망런: 설문대할망의 비밀 편지</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    
+    <!-- 인트로 화면 (설문대 할망 스토리텔링) -->
+    <div id="intro-screen">
+        <header id="intro-header">
+            <h1>⛰️ 할망런 🏃‍♀️</h1>
+        </header>
+        <div id="intro-content">
+            <div class="halmang-illustration-box">
+                <!-- 설문대할망 일러스트가 들어갈 자리 -->
+                <img id="halmang-illustration" src="images/halmang_intro.png" alt="설문대할망 일러스트" onerror="this.src='https://placehold.co/200x200/4a90e2/ffffff?text=할망+이미지'">
+            </div>
+            
+            <div id="dialogue-box">
+                <p id="halmang-dialogue">...</p>
+            </div>
+            
+            <button id="skip-button" onclick="nextDialogue()">다음 (SKIP)</button>
+        </div>
+    </div>
+    <!-- 인트로 화면 끝 -->
+
+    <!-- 메인 콘텐츠 -->
+    <div id="main-content-wrapper" style="display:none;">
+        <header>
+            <h1>⏳ 할망런: 설문대할망의 비밀 편지 🏃‍♀️</h1>
+            <p>할망이 내린 **비밀 편지**를 따라 제주 창조의 씨앗을 수집하는 몰입형 가족 학습 여행입니다.</p>
+        </header>
+
+        <main>
+            <section id="project-intro">
+                <h2>프로젝트 개요</h2>
+                <p>설문대할망이 내린 '창조의 씨앗'을 수집하며 제주의 역사와 창조 정신을 배우는 가족 단위 런케이션입니다.</p>
+            </section>
+
+            <hr>
+
+            <section id="mission-status">
+                <h2>할망의 씨앗 수집 현황 (1일차 여정)</h2>
+                <div class="shadow-collection">
+                    <!-- 미션 1: 설문대여성문화센터 -->
+                    <div id="shadow-1" class="shadow-item">
+                        <h3>창조의 씨앗</h3>
+                        <p class="location">장소: 설문대여성문화센터 (OT/편지 수신)</p>
+                        <div class="status-indicator incomplete">미수집</div>
+                    </div>
+                    <!-- 미션 2: 돌문화공원 -->
+                    <div id="shadow-2" class="shadow-item">
+                        <h3>소망의 씨앗</h3>
+                        <p class="location">장소: 돌문화공원</p>
+                        <div class="status-indicator incomplete">미수집</div>
+                    </div>
+                    <!-- 미션 3: 4.3 평화공원 -->
+                    <div id="shadow-3" class="shadow-item">
+                        <h3>평화의 씨앗</h3>
+                        <p class="location">장소: 4.3 평화공원</p>
+                        <div class="status-indicator incomplete">미수집</div>
+                    </div>
+                </div>
+                <button id="trigger-next-mission" onclick="triggerNextMission()">다음 '미수집' 씨앗 미션 시작</button>
+            </section>
+
+            <hr>
+
+            <section id="final-artifact">
+                <h2>✨ 최종 보상: 야시장 바우처</h2>
+                <div id="artifact-display">
+                    <p id="artifact-message" class="message">세 시대의 '창조의 씨앗'을 모두 모으면, **야시장에서 사용할 수 있는 바우처** 교환권이 여기에 나타납니다.</p>
+                    <img id="final-artifact-image" src="" alt="야시장 바우처 이미지" style="display: none;">
+                </div>
+                <button id="view-ar-exhibition" disabled>바우처 교환 안내 보기</button>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 설문대할망의 비밀 편지 (가족 학습 여행)</p>
+        </footer>
+    </div>
+    
+    <!-- 미션 발동 팝업 (모달) - 2단계 구조 -->
+    <div id="mission-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            
+            <!-- STEP 1: 씨앗 수신 모드 (학습/사료 단계 삭제됨) -->
+            <div id="mission-step-1">
+                <h3 id="modal-title-1"></h3>
+                <p class="mission-guide">당신은 **<span id="modal-location-1"></span>**에 도착했습니다. 할망이 보낸 **창조의 씨앗**을 확인하세요.</p>
+                
+                <div class="shadow-image-container">
+                    <!-- 1단계: 씨앗 수신 이미지 -->
+                    <img id="step1-shadow-image" src="" alt="창조의 씨앗" class="shadow-effect">
+                </div>
+                
+                <button id="start-photo-mission" onclick="startPhotoMission()">다음 미션 받기</button>
+            </div>
+
+            <!-- STEP 2: 인증 모드 (카메라) -->
+            <div id="mission-step-2" style="display: none;">
+                <h3 id="modal-title-2" class="text-xl font-bold">인증 사진 촬영 (선택 미션)</h3>
+                <p id="mission-step-2-guide" class="mission-guide">현장의 영속적인 정신을 담아 **인증 사진**을 촬영하세요. (사진 촬영은 선택 사항입니다.)</p>
+
+                <div class="camera-container">
+                    <!-- 카메라 영상 피드 -->
+                    <video id="camera-feed" autoplay playsinline></video>
+                    <!-- 오버레이: 카메라 위에 오버레이될 씨앗 이미지 -->
+                    <img id="overlay-shadow-image" src="" alt="오버레이 씨앗" class="overlay-effect">
+                    <!-- 캡처된 이미지를 표시할 캔버스 -->
+                    <canvas id="photo-canvas" style="display:none;"></canvas>
+                </div>
+
+                <div class="camera-controls">
+                    <button id="capture-button" onclick="capturePhoto()">📸 사진 찍기 (선택)</button>
+                    <button id="complete-collection-button" onclick="completeSeedCollection()" style="background-color: #28a745;">✅ 씨앗 수집 완료</button>
+                    <button id="retake-button" onclick="retakePhoto()" style="display:none; margin-top: 10px; background-color: #ffaa33;">🔄 다시 찍기</button>
+                </div>
+
+                <p id="photo-feedback" class="feedback"></p>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
